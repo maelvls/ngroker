@@ -2,19 +2,23 @@
 
 #
 # ngroker, a tiny helper for launching ngrok sessions with my colleagues.
-# Requires jq, jl and ngrok:
 #
-#   DEBUG=1 to enable some debugging,
+# Requires jq, jl, ngrok.
+#
+# Optional env variables:
+#   DEBUG=1 to enable some debugging
 #   COLOR=(never|always) to turn on/off coloring and emojis.
 #
-# Note: you can also use gh-auth to allow your colleagues to access your
-# session using by allowing their pub key stored on Github.
-#
-#    gem install github-auth
-#    gh-auth add --users=gumbi2400 --command="/usr/local/bin/tmux attach"
-#    gh-auth add --users="maelvls" --command="/usr/local/bin/tmux attach"
+# Note: you can also use gh-auth ('gem install github-auth') to allow your
+# colleagues to access your session using by allowing their pub key stored
+# on Github.
 
-# Turn on coloring only if the current shell is interactive (or COLOR=always)
+# Turn on coloring only if the current shell is interactive (or
+# COLOR=always)
+#
+# IMPORTANT: use printf instead of "echo -e" when you want to render
+# colors; echo -e is not supported BSD versions of /bin/echo (like on
+# macOS).
 if [ -t 1 ] || [ "$COLOR" = always ] && [ "$COLOR" != never ]; then
     gray='\033[90m'
     red='\033[91m'
@@ -23,42 +27,74 @@ if [ -t 1 ] || [ "$COLOR" = always ] && [ "$COLOR" != never ]; then
     yel='\033[93m'
     end='\033[0m'
     ok='✅ '
-    warn='⚠️  '
+    broom='🧹 '
+    earth='🌍 '
     err='❌ '
 fi
 
 if ! command -v jl >/dev/null 2>&1; then
-    echo "${err}${red}Error:${end} jl not found, install it with:" >&2
-    echo "    ${gray}(cd && GO111MODULE=on go get github.com/koenbollen/jl)${end}" >&2
+    printf "${err}${red}Error:${end} jl not found, install it with:\n" >&2
+    printf "    ${gray}brew install koenbollen/public/jl)${end}\n" >&2
     exit 13
 fi
 
 if ! command -v ngrok >/dev/null 2>&1; then
-    echo "${err}${red}Error:${end} ngrok not found, install it with:" >&2
-    echo "    ${gray}brew cask install ngrok${end}" >&2
+    printf "${err}${red}Error:${end} ngrok not found, install it with:\n" >&2
+    printf "    ${gray}brew cask install ngrok${end}\n" >&2
     exit 14
 fi
 
 if ! command -v jq >/dev/null 2>&1; then
-    echo "${err}${red}Error:${end} ngrok not found, install it with:" >&2
-    echo "    ${gray}brew install jq${end}" >&2
-    exit 14
+    printf "${err}${red}Error:${end} ngrok not found, install it with:\n" >&2
+    printf "    ${gray}brew install jq${end}\n" >&2
+    exit 15
 fi
+
+if ! [ -f ~/.ngrok2/ngrok.yml ]; then
+    printf "${err} Not logged in to ngrok. To sign up & log in to ngrok, go to:\n" >&2
+    printf "    ${blue}https://dashboard.ngrok.com/get-started/setup${end}\n" >&2
+    printf "and then copy-paste the 'authtoken' and run:\n" >&2
+    printf "    ngrok authtoken ${gray}<your-auth-token>${end}\n" >&2
+    exit 16
+fi
+
+if [ $# -ne 1 ]; then
+    printf "${err} ${red}Usage:${end} $(basename $0) ${gray}<github-username>${end}\n" >&2
+    exit 17
+fi
+username=$1
+
+tmux has-session -t ngroker || tmux new -s ngroker -d
+
+if ! curl -s "https://github.com/$username.keys" >/tmp/pub; then
+    printf "${err} Github username '$username' not found\n" >&2
+    exit 18
+fi
+
+while read -r pubkey; do
+    echo "command=$(command -v tmux) attach ngroker $pubkey https://github.com/$username" >>~/.ssh/authorized_keys
+done </tmp/pub
+printf "${earth}${green}Note:${end} Added $(wc -l /tmp/pub) key(s) from ${blue}https://github.com/$username.keys${end} to ~/.ssh/authorized_keys\n"
+
+trap cleanup_authorized_keys EXIT # HUP INT TERM
+cleanup_authorized_keys() {
+    code=$?
+    sed -i~ "/github.com\/$username/d" ~/.ssh/authorized_keys
+    printf "${broom}Cleaned up $username's keys from ~/.ssh/authorized_keys\n"
+    exit $code
+}
 
 ngrok tcp 22 --region=eu --log=stdout --log-format=json | tee >(jl >/dev/stderr) | while read -r line; do
     if url=$(echo "$line" | jq --exit-status -r '.url'); then
         port=$(echo "$url" | cut -d: -f3)
         host=$(echo "$url" | cut -d: -f2 | tr -d '/')
-        [ -z "$DEBUG" ] || echo -e "url found: $yel$url$end"
-        [ -z "$DEBUG" ] || echo -e "port found: $yel$port$end"
-        [ -z "$DEBUG" ] || echo -e "host found: $yel$host$end"
+        [ -z "$DEBUG" ] || printf "url found: $yel$url$end\n"
+        [ -z "$DEBUG" ] || printf "port found: $yel$port$end\n"
+        [ -z "$DEBUG" ] || printf "host found: $yel$host$end\n"
 
         cmd="ssh $USER@$host -p $port"
 
-        echo -e "${ok}${green}Note:${end} here is the command to paste in Slack: ${gray}(already copied into paste-bin)${end}"
-        echo -e "    $blue$cmd$end"
-        echo "$cmd" | pbcopy
-        echo -e "${warn}${yel}Warning:${end} don't forget to also ${yel}gh-auth add${end}:"
-        echo -e "    ${gray}gh-auth add --command='/usr/local/bin/tmux attach' --users=Callisto13${end}"
+        printf "${ok}${green}Note:${end} here is the command to paste in Slack: ${gray}(already copied into paste-bin)${end}\n"
+        printf "    $blue$cmd$end\n"
     fi
 done
