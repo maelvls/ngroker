@@ -94,7 +94,10 @@ ngrok tcp 22 --region=eu --log=stdout --log-format=json | tee >(jl >/dev/stderr)
 
         cmd="ssh $USER@$host -p $port"
 
-        printf "${ok}${green}Note:${end} here is the command to paste in Slack: ${gray}(already copied into paste-bin)${end}\n"
+        printf "${ok}${green}Note:${end} ngrok is running! Next steps:\n"
+        printf "First, copy this command and give it to ${yel}$username${end}:\n"
         printf "    $blue$cmd$end\n"
+        printf "Then, open tmux with the command:\n"
+        printf "    ${blue}tmux attach ngroker${end}\n"
     fi
 done
