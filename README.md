@@ -5,3 +5,9 @@ brew cask install ngrok
 brew install jq
 curl -L https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f5ea/raw/6b177aa7e0808d5e1843ef4f446822e5b7bc334e/ngroker > /tmp/ngroker && install /tmp/ngroker /usr/local/bin
 ```
+
+And create a session that will let `Callisto13` (or any Github username) access the `ngroker` tmux session:
+
+```
+ngroker Callisto13
+```
