@@ -1,4 +1,4 @@
-To install `ngroker`:
+To install `ngroker` on macOS:
 ```sh
 brew install koenbollen/public/jl
 brew cask install ngrok

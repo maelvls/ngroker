@@ -4,8 +4,6 @@
 # ngroker, a tiny helper for launching ngrok sessions with my colleagues.
 # Requires jq, jl and ngrok:
 #
-#   brew install jq jl ngrok
-#
 #   DEBUG=1 to enable some debugging,
 #   COLOR=(never|always) to turn on/off coloring and emojis.
 #
