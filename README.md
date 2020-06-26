@@ -1,8 +1,12 @@
-## Install & use `ngroker` on macOS
+## Install `ngroker` on Linux
 
-(0) Makes sure `sshd` is running (go to  → System Preferences → Sharing → check the box "Remote login")
+An sshd deamon must be running. Things required in your PATH: [ngrok](https://ngrok.com/download), [jl](https://github.com/koenbollen/jl), [tmux](https://github.com/tmux/tmux/wiki/Installing), [jq](https://stedolan.github.io/jq/download/)
 
-(1) Install `ngroker` by running the following commands:
+## Install `ngroker` on macOS
+
+(1) Make sure `sshd` is running (go to  → System Preferences → Sharing → check the box "Remote login")
+
+(2) Install `ngroker` by running the following commands:
 
 ```sh
 brew install jq tmux koenbollen/public/jl
@@ -18,7 +22,9 @@ curl -L https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f
 ngrok authtoken <the-token-displayed-in-get-started-setup>
 ```
 
-(4) Finally you can create a session someone by giving their Github
+## Use `ngroker` to share a tmux session with a colleague
+
+Finally you can create a session someone by giving their Github
 username (e.g. `maelvls`). The session will happen in `tmux attach -t
 ngroker`
 
