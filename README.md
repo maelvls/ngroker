@@ -32,7 +32,7 @@ ngrok authtoken <the-token-displayed-in-get-started-setup>
 
 ## Use `ngroker` to share a tmux session with a colleague
 
-Finally you can create a session someone by giving their Github
+Finally you can create a session someone by giving the script their Github
 username (e.g. `maelvls`). The session will happen in `tmux attach -t
 ngroker`
 
