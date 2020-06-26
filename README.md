@@ -1,10 +1,9 @@
 ## Install `ngroker` on Linux
 
 Required:
-- an `sshd` instance running,
-- some binaries in your PATH: [ngrok](https://ngrok.com/download), [jl](https://github.com/koenbollen/jl), [tmux](https://github.com/tmux/tmux/wiki/Installing), [jq](https://stedolan.github.io/jq/download/)
-- the `ngroker` script somewhere in your PATH, e.g.:
-
+1. an `sshd` instance running,
+2. some binaries in your PATH: [ngrok](https://ngrok.com/download), [jl](https://github.com/koenbollen/jl), [tmux](https://github.com/tmux/tmux/wiki/Installing), [jq](https://stedolan.github.io/jq/download/)
+3. the `ngroker` script somewhere in your PATH, e.g.:
   ```
   curl -sL https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f5ea/raw/b95c2c045f63c8fec1ec5d63c82809273a14f04b/ngroker > /tmp/ngroker
   install /tmp/ngroker $(go env GOPATH)/bin
