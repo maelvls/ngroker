@@ -26,28 +26,34 @@ if [ -t 1 ] || [ "$COLOR" = always ] && [ "$COLOR" != never ]; then
     green='\033[92m'
     yel='\033[93m'
     end='\033[0m'
-    ok='✅ '
-    broom='🧹 '
-    earth='🌍 '
-    err='❌ '
+    ok='✅  '
+    broom='🧹  '
+    earth='🌍  '
+    err='❌  '
+fi
+
+if ! command -v tmux >/dev/null 2>&1; then
+    printf "${err}${red}Error:${end} tmux not found, install it with:\n" >&2
+    printf "    ${gray}brew install tmux)${end}\n" >&2
+    exit 1
 fi
 
 if ! command -v jl >/dev/null 2>&1; then
     printf "${err}${red}Error:${end} jl not found, install it with:\n" >&2
     printf "    ${gray}brew install koenbollen/public/jl)${end}\n" >&2
-    exit 13
+    exit 1
 fi
 
 if ! command -v ngrok >/dev/null 2>&1; then
     printf "${err}${red}Error:${end} ngrok not found, install it with:\n" >&2
     printf "    ${gray}brew cask install ngrok${end}\n" >&2
-    exit 14
+    exit 1
 fi
 
 if ! command -v jq >/dev/null 2>&1; then
     printf "${err}${red}Error:${end} ngrok not found, install it with:\n" >&2
     printf "    ${gray}brew install jq${end}\n" >&2
-    exit 15
+    exit 1
 fi
 
 if ! [ -f ~/.ngrok2/ngrok.yml ]; then
@@ -55,33 +61,39 @@ if ! [ -f ~/.ngrok2/ngrok.yml ]; then
     printf "    ${blue}https://dashboard.ngrok.com/get-started/setup${end}\n" >&2
     printf "and then copy-paste the 'authtoken' and run:\n" >&2
     printf "    ngrok authtoken ${gray}<your-auth-token>${end}\n" >&2
-    exit 16
+    exit 1
 fi
 
-if [ $# -ne 1 ]; then
+if [ $# -lt 1 ]; then
     printf "${err} ${red}Usage:${end} $(basename $0) ${gray}<github-username>${end}\n" >&2
-    exit 17
+    exit 1
 fi
-username=$1
 
 tmux has-session -t ngroker || tmux new -s ngroker -d
 
-if ! curl -s "https://github.com/$username.keys" >/tmp/pub; then
-    printf "${err} Github username '$username' not found\n" >&2
-    exit 18
-fi
+usernames=("$@")
 
-while read -r pubkey; do
-    echo "command=\"$(command -v tmux) attach -t ngroker\" $pubkey https://github.com/$username" >>~/.ssh/authorized_keys
-done </tmp/pub
-printf "${earth}${green}Note:${end} Added $(wc -l /tmp/pub) key(s) from ${blue}https://github.com/$username.keys${end} to ~/.ssh/authorized_keys\n"
+rm -rf /tmp/pub
+mkdir -p ~/.ssh
+for username in "${usernames[@]}"; do
+    if ! curl -s "https://github.com/$username.keys" >/tmp/pub; then
+        printf "${err} Github username '$username' not found\n" >&2
+        exit 1
+    fi
+    while read -r pubkey; do
+        echo "command=\"$(command -v tmux) attach -t ngroker\" $pubkey https://github.com/$username" >>~/.ssh/authorized_keys
+    done </tmp/pub
+    printf "${earth}${green}Note:${end} Added $(wc -l /tmp/pub) key(s) from ${blue}https://github.com/${yel}$username${blue}.keys${end} to ~/.ssh/authorized_keys\n"
+done
 
 trap cleanup_authorized_keys EXIT # HUP INT TERM
 cleanup_authorized_keys() {
-    code=$?
-    sed -i~ "/github.com\/$username/d" ~/.ssh/authorized_keys
-    printf "${broom}Cleaned up $username's keys from ~/.ssh/authorized_keys\n"
-    exit $code
+    for username in "${usernames[@]}"; do
+        code=$?
+        sed -i~ "/github.com\/$username/d" ~/.ssh/authorized_keys
+        printf "${broom}Cleaned up $username's keys from ~/.ssh/authorized_keys\n"
+        exit $code
+    done
 }
 
 ngrok tcp 22 --region=eu --log=stdout --log-format=json | tee >(jl >/dev/stderr) | while read -r line; do
@@ -95,7 +107,7 @@ ngrok tcp 22 --region=eu --log=stdout --log-format=json | tee >(jl >/dev/stderr)
         cmd="ssh $USER@$host -p $port"
 
         printf "${ok}${green}Note:${end} ngrok is running! Next steps:\n"
-        printf "First, copy this command and give it to ${yel}$username${end}:\n"
+        printf "First, copy this command and give it to ${yel}${usernames[*]}${end}:\n"
         printf "    $blue$cmd$end\n"
         printf "Then, open tmux with the command:\n"
         printf "    ${blue}tmux attach -t ngroker${end}\n"
