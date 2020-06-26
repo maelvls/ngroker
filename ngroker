@@ -72,7 +72,7 @@ if ! curl -s "https://github.com/$username.keys" >/tmp/pub; then
 fi
 
 while read -r pubkey; do
-    echo "command=$(command -v tmux) attach -t ngroker $pubkey https://github.com/$username" >>~/.ssh/authorized_keys
+    echo "command=\"$(command -v tmux) attach -t ngroker\" $pubkey https://github.com/$username" >>~/.ssh/authorized_keys
 done </tmp/pub
 printf "${earth}${green}Note:${end} Added $(wc -l /tmp/pub) key(s) from ${blue}https://github.com/$username.keys${end} to ~/.ssh/authorized_keys\n"
 
