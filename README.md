@@ -7,7 +7,7 @@
 ```sh
 brew install jq tmux koenbollen/public/jl
 brew cask install ngrok
-curl -L https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f5ea/raw/5e7804cda14c89b12110e2303d6a200ba7eaea73/ngroker > /tmp/ngroker && install /tmp/ngroker /usr/local/bin
+curl -L https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f5ea/raw/b95c2c045f63c8fec1ec5d63c82809273a14f04b/ngroker > /tmp/ngroker && install /tmp/ngroker /usr/local/bin
 ```
 
 (2) Then, make sure you are [registered with ngrok](https://dashboard.ngrok.com/get-started/setup) (e.g. using your Github account to signup/log in)
