@@ -1,4 +1,4 @@
-(1) Install `ngroker` on macOS:
+(1) Install `ngroker` on macOS (it's just a tiny bash script, see below):
 ```sh
 brew install koenbollen/public/jl
 brew cask install ngrok
