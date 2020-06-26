@@ -1,4 +1,5 @@
 (1) Install `ngroker` on macOS (it's just a tiny bash script, see below):
+
 ```sh
 brew install koenbollen/public/jl
 brew cask install ngrok
@@ -10,12 +11,12 @@ curl -L https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f
 
 (3) Copy the `authtoken` in the [ngrok setup page](https://dashboard.ngrok.com/get-started/setup) and run:
 
-```
+```sh
 ngrok authtoken <the-token-displayed-in-get-started-setup>
 ```
 
 (4) Finally you can create a session with e.g. `maelvls` (or any other Github username). The session will happen in `tmux attach ngroker`
 
-```
+```sh
 ngroker maelvls
 ```
