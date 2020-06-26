@@ -18,7 +18,7 @@ Required:
 ```sh
 brew install jq tmux koenbollen/public/jl
 brew cask install ngrok
-curl -sL https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f5ea/raw/c79f5370cf974eaef7bf3c1fa504d91ebda6e006/ngroker > /tmp/ngroker 
+curl -sL https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f5ea/raw/c79f5370cf974eaef7bf3c1fa504d91ebda6e006/ngroker > /tmp/ngroker
 install /tmp/ngroker /usr/local/bin
 ```
 
