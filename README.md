@@ -1,9 +1,8 @@
 (1) Install `ngroker` on macOS (it's just a tiny bash script, see below):
 
 ```sh
-brew install koenbollen/public/jl
+brew install jq tmux koenbollen/public/jl
 brew cask install ngrok
-brew install jq
 curl -L https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f5ea/raw/3fcf75f0cbe2f7fc884a2080f8cdcc325ee9505e/ngroker > /tmp/ngroker && install /tmp/ngroker /usr/local/bin
 ```
 
