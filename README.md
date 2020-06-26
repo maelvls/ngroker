@@ -18,11 +18,15 @@ curl -L https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f
 ngrok authtoken <the-token-displayed-in-get-started-setup>
 ```
 
-(4) Finally you can create a session with two other people e.g. `maelvls` +
-`Callisto13` (you can add as many as you want using any other Github
-username). The session will happen in `tmux attach -t ngroker`
+(4) Finally you can create a session someone by giving their Github
+username (e.g. `maelvls`). The session will happen in `tmux attach -t
+ngroker`
 
 ```sh
+# Share session with mael
+ngroker maelvls
+
+# Let's be crazy and share the session with two people!
 ngroker maelvls Callisto13
 ```
 
