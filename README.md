@@ -1,3 +1,5 @@
+![act](https://user-images.githubusercontent.com/2195781/85836295-b05bb900-b796-11ea-9565-9099a3d4b018.gif)
+
 ## Install `ngroker` on Linux
 
 Required:
@@ -43,7 +45,3 @@ ngroker maelvls
 # Let's be crazy and share the session with two people!
 ngroker maelvls Callisto13
 ```
-
-Demo:
-
-![act](https://user-images.githubusercontent.com/2195781/85836295-b05bb900-b796-11ea-9565-9099a3d4b018.gif)
