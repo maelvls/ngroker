@@ -88,12 +88,12 @@ done
 
 trap cleanup_authorized_keys EXIT # HUP INT TERM
 cleanup_authorized_keys() {
+    code=$?
     for username in "${usernames[@]}"; do
-        code=$?
         sed -i~ "/github.com\/$username/d" ~/.ssh/authorized_keys
-        printf "${broom}Cleaned up $username's keys from ~/.ssh/authorized_keys\n"
-        exit $code
+        printf "${broom}Cleaned up ${yel}$username${end}'s pub keys from ~/.ssh/authorized_keys\n"
     done
+    exit $code
 }
 
 ngrok tcp 22 --region=eu --log=stdout --log-format=json | tee >(jl >/dev/stderr) | while read -r line; do
