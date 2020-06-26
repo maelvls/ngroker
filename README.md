@@ -15,7 +15,7 @@ curl -L https://gist.githubusercontent.com/maelvls/d0b34b23dfafeabc2b23b710e413f
 ngrok authtoken <the-token-displayed-in-get-started-setup>
 ```
 
-(4) Finally you can create a session with e.g. `maelvls` (or any other Github username). The session will happen in `tmux attach ngroker`
+(4) Finally you can create a session with e.g. `maelvls` (or any other Github username). The session will happen in `tmux attach -t ngroker`
 
 ```sh
 ngroker maelvls
