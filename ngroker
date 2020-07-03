@@ -75,7 +75,7 @@ usernames=()
 while [ "$#" -gt 0 ]; do
     case "$1" in
     --update)
-        curl -L https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
+        curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
         if false && ! diff -q /tmp/ngroker "$0" >/dev/null; then
             printf "${ok}Already using the latest version (master)\n"
             exit 0
