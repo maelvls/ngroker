@@ -76,17 +76,17 @@ while [ "$#" -gt 0 ]; do
     case "$1" in
     --update)
         curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
-        if ! diff -q /tmp/ngroker "$0" >/dev/null; then
+        if false && ! diff -q /tmp/ngroker "$0" >/dev/null; then
             printf "${ok}Already using the latest version (master)\n"
             exit 0
         fi
 
+        S=
         if ! [ -w "$0" ]; then
-            sudo install /tmp/ngroker "$(dirname "$0")"
-        else
-            install /tmp/ngroker "$(dirname "$0")"
+            S="sudo "
         fi
-        printf "${ok}${green}${end} Successfully updated to latest version (master)\n"
+        printf "${ok}An update is available; to update, run:\n"
+        printf "${ok}  ${S}install /tmp/ngroker $(dirname "$0")\n"
         exit 0
         ;;
     *) usernames+=("$1") ;;
