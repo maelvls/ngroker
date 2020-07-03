@@ -71,7 +71,20 @@ fi
 
 tmux has-session -t ngroker || tmux new -s ngroker -d
 
-usernames=("$@")
+usernames=()
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+    --update)
+        curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
+        if ! [ -w "$0" ]; then
+            sudo install /tmp/ngroker "$(dirname "$0")"
+        else
+            install /tmp/ngroker "$(dirname "$0")"
+        fi
+        ;;
+    *) usernames+=("$1") ;;
+    esac
+done
 
 rm -rf /tmp/pub
 mkdir -p ~/.ssh
