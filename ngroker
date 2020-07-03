@@ -30,6 +30,7 @@ if [ -t 1 ] || [ "$COLOR" = always ] && [ "$COLOR" != never ]; then
     broom='🧹  '
     earth='🌍  '
     err='❌  '
+    warn='⚠️  '
 fi
 
 if ! command -v tmux >/dev/null 2>&1; then
@@ -65,33 +66,32 @@ if ! [ -f ~/.ngrok2/ngrok.yml ]; then
 fi
 
 if [ $# -lt 1 ]; then
-    printf "${err} ${red}Usage:${end} $(basename $0) ${gray}<github-username>${end}\n" >&2
+    printf "${err} ${red}Usage:${end} $(basename $0) ${gray}<github-username>...${end}\n" >&2
     exit 1
 fi
 
 tmux has-session -t ngroker || tmux new -s ngroker -d
 
-usernames=()
-while [ "$#" -gt 0 ]; do
-    case "$1" in
-    --update)
-        curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
-        if diff -q /tmp/ngroker "$0" >/dev/null; then
-            printf "${ok}Already using the latest version (master)\n"
-            exit 0
-        fi
+usernames=("$@")
 
-        S=
-        if ! [ -w "$0" ]; then
-            S="sudo "
-        fi
-        printf "${ok}${green}An update is available${end}. Run this to update:\n"
-        printf "${gray}${S}install /tmp/ngroker $(dirname "$0")${end}\n"
+# usage: check_update "$0"
+check_update() {
+    curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
+    if diff -q /tmp/ngroker "$0" >/dev/null; then
+        printf "${ok}Already using the latest version (master)\n"
         exit 0
-        ;;
-    *) usernames+=("$1") ;;
-    esac
-done
+    fi
+
+    S=
+    if ! [ -w "$0" ]; then
+        S="sudo "
+    fi
+    printf "${warn}${yel}An update is available${end}. To update, run:\n\n"
+    printf "  ${gray}curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker${end}\n"
+    printf "  ${gray}${S}install /tmp/ngroker $(dirname "$0")${end}\n\n"
+}
+
+check_update "$0"
 
 rm -rf /tmp/pub
 mkdir -p ~/.ssh
