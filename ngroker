@@ -77,7 +77,7 @@ while [ "$#" -gt 0 ]; do
     --update)
         curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
         if ! diff -q /tmp/ngroker "$0" >/dev/null; then
-            printf "${ok}Already using the latest version\n"
+            printf "${ok}Already using the latest version (master)\n"
             exit 0
         fi
 
@@ -86,7 +86,7 @@ while [ "$#" -gt 0 ]; do
         else
             install /tmp/ngroker "$(dirname "$0")"
         fi
-        printf "${ok}${green}Note:${end} successfully updated to latest version\n"
+        printf "${ok}${green}${end} Successfully updated to latest version (master)\n"
         exit 0
         ;;
     *) usernames+=("$1") ;;
