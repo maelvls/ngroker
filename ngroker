@@ -86,7 +86,7 @@ while [ "$#" -gt 0 ]; do
             S="sudo "
         fi
         printf "${ok}${green}An update is available${end}. Run this to update:\n"
-        printf "${gray}install /tmp/ngroker $(dirname "$0")${end}\n"
+        printf "${gray}${S}install /tmp/ngroker $(dirname "$0")${end}\n"
         exit 0
         ;;
     *) usernames+=("$1") ;;
