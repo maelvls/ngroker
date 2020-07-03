@@ -81,6 +81,8 @@ while [ "$#" -gt 0 ]; do
         else
             install /tmp/ngroker "$(dirname "$0")"
         fi
+        printf "${ok}${green}Note:${end} successfully updated to latest version\n"
+        exit 0
         ;;
     *) usernames+=("$1") ;;
     esac
