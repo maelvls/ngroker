@@ -76,7 +76,7 @@ while [ "$#" -gt 0 ]; do
     case "$1" in
     --update)
         curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
-        if false && ! diff -q /tmp/ngroker "$0" >/dev/null; then
+        if diff -q /tmp/ngroker "$0" >/dev/null; then
             printf "${ok}Already using the latest version (master)\n"
             exit 0
         fi
