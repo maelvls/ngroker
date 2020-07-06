@@ -79,6 +79,7 @@ check_update() {
     curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
     if diff -q /tmp/ngroker "$0" >/dev/null; then
         printf "${ok}Already using the latest version (master)\n"
+        return
     fi
 
     S=
@@ -108,6 +109,11 @@ done
 trap cleanup_authorized_keys EXIT # HUP INT TERM
 cleanup_authorized_keys() {
     code=$?
+
+    # When killing ngroker with ctrl+c, we want to have a newline so that
+    # we don't printf in the same line as the ^C displayed on ctrl+c.
+    echo
+
     for username in "${usernames[@]}"; do
         sed -i~ "/github.com\/$username/d" ~/.ssh/authorized_keys
         printf "${broom}Cleaned up ${yel}$username${end}'s pub keys from ~/.ssh/authorized_keys\n"
