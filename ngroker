@@ -79,7 +79,6 @@ check_update() {
     curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker >/tmp/ngroker
     if diff -q /tmp/ngroker "$0" >/dev/null; then
         printf "${ok}Already using the latest version (master)\n"
-        exit 0
     fi
 
     S=
