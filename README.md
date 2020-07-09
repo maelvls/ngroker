@@ -3,11 +3,11 @@
 ## Install `ngroker` on Linux
 
 Required:
-1. `sshd` instance running and some binaries in your PATH:
+1. some binaries in your PATH + `sshd` instance running:
    [ngrok](https://ngrok.com/download), [jl](https://github.com/koenbollen/jl),
    [tmux](https://github.com/tmux/tmux/wiki/Installing),
    [jq](https://stedolan.github.io/jq/download/);
-   to install all four binaries, run:
+   to install all that, run:
 
    ```sh
    sudo apt install openssh-server tmux jq snapd
@@ -15,12 +15,12 @@ Required:
    go get github.com/koenbollen/jl
    ```
   
-3. the `ngroker` script somewhere in your PATH, e.g.:
+2. the `ngroker` script somewhere in your PATH, e.g.:
 
-  ```sh
-  curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker > /tmp/ngroker
-  install /tmp/ngroker $(go env GOPATH)/bin
-  ```
+   ```sh
+   curl -sL https://raw.githubusercontent.com/maelvls/ngroker/master/ngroker > /tmp/ngroker
+   install /tmp/ngroker $(go env GOPATH)/bin
+   ```
 
 ## Install `ngroker` on macOS
 
