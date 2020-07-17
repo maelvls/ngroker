@@ -13,6 +13,34 @@
 # colleagues to access your session using by allowing their pub key stored
 # on Github.
 
+help() {
+    cat <<EOF
+ngroker helps you use tmux + ngrok with your friends using Github
+usernames.
+
+The tmux session that your friend will go into is called 'ngroker',
+you also have to join that tmux session yourself using:
+
+    tmux attach -t ngroker
+
+Usage:
+    ngroker <github-username>...
+EOF
+}
+
+while [ $# -gt 0 ]; do
+    case $1 in
+    -h | --help)
+        help
+        exit 0
+        ;;
+    -v)
+        echo "no version, sorry 🙄"
+        exit 0
+        ;;
+    esac
+done
+
 # Turn on coloring only if the current shell is interactive (or
 # COLOR=always)
 #
