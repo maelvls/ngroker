@@ -28,8 +28,9 @@ Usage:
 EOF
 }
 
+usernames=()
 while [ $# -gt 0 ]; do
-    case $1 in
+    case "$1" in
     -h | --help)
         help
         exit 0
@@ -38,17 +39,23 @@ while [ $# -gt 0 ]; do
         echo "no version, sorry 🙄"
         exit 0
         ;;
+    *)
+        usernames+=("$1")
+        ;;
     esac
     shift
 done
-
-# Turn on coloring only if the current shell is interactive (or
-# COLOR=always)
-#
-# IMPORTANT: use printf instead of "echo -e" when you want to render
-# colors; echo -e is not supported BSD versions of /bin/echo (like on
-# macOS).
+if [ $# -lt 1 ]; then
+    printf "${err} ${red}Usage:${end} $(basename $0) ${gray}<github-username>...${end}\n" >&2
+    exit 1
+fi
 if [ -t 1 ] || [ "$COLOR" = always ] && [ "$COLOR" != never ]; then
+    # We turn on coloring only if the current shell is interactive (or
+    # COLOR=always).
+    #
+    # IMPORTANT: in the rest of this script, use printf instead of "echo
+    # -e" when you want to render colors; echo -e is not supported BSD
+    # versions of /bin/echo (like on macOS).
     gray='\033[37m'
     red='\033[91m'
     blue='\033[94m'
@@ -94,14 +101,7 @@ if ! [ -f ~/.ngrok2/ngrok.yml ]; then
     exit 1
 fi
 
-if [ $# -lt 1 ]; then
-    printf "${err} ${red}Usage:${end} $(basename $0) ${gray}<github-username>...${end}\n" >&2
-    exit 1
-fi
-
 tmux has-session -t ngroker || tmux new -s ngroker -d
-
-usernames=("$@")
 
 # usage: check_update "$0"
 check_update() {
