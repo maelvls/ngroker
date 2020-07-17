@@ -28,27 +28,6 @@ Usage:
 EOF
 }
 
-usernames=()
-while [ $# -gt 0 ]; do
-    case "$1" in
-    -h | --help)
-        help
-        exit 0
-        ;;
-    -v)
-        echo "no version, sorry 🙄"
-        exit 0
-        ;;
-    *)
-        usernames+=("$1")
-        ;;
-    esac
-    shift
-done
-if [ $# -lt 1 ]; then
-    printf "${err} ${red}Usage:${end} $(basename $0) ${gray}<github-username>...${end}\n" >&2
-    exit 1
-fi
 if [ -t 1 ] || [ "$COLOR" = always ] && [ "$COLOR" != never ]; then
     # We turn on coloring only if the current shell is interactive (or
     # COLOR=always).
@@ -67,6 +46,28 @@ if [ -t 1 ] || [ "$COLOR" = always ] && [ "$COLOR" != never ]; then
     earth='🌍  '
     err='❌  '
     warn='⚠️  '
+fi
+
+usernames=()
+while [ $# -gt 0 ]; do
+    case "$1" in
+    -h | --help)
+        help
+        exit 0
+        ;;
+    -v)
+        echo "no version, sorry 🙄"
+        exit 0
+        ;;
+    *)
+        usernames+=("$1")
+        ;;
+    esac
+    shift
+done
+if [ ${#usernames[@]} -eq 0 ]; then
+    printf "${err} ${red}Usage:${end} $(basename $0) ${gray}<github-username>...${end}\n" >&2
+    exit 1
 fi
 
 if ! command -v tmux >/dev/null 2>&1; then
