@@ -39,6 +39,7 @@ while [ $# -gt 0 ]; do
         exit 0
         ;;
     esac
+    shift
 done
 
 # Turn on coloring only if the current shell is interactive (or
