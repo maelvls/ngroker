@@ -95,9 +95,12 @@ if ! command -v ngrok >/dev/null 2>&1; then
     if [ "$(uname -s)" == "Darwin" ]; then
         printf "    ${gray}brew cask install ngrok${end}\n" >&2
     else
+        printf "If you use snap:\n" >&2
+        printf "    ${gray}sudo snap install ngrok${end}\n" >&2
+        printf "Or a oneliner:\n" >&2
         printf "    ${gray}curl -L https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip > /tmp/n.zip && unzip -d /tmp /tmp/n.zip && install /tmp/ngrok /usr/local/bin${end}\n" >&2
-        printf "" >&2
-        printf "Or go to https://ngrok.com/download and place the binary in your PATH." >&2
+        printf "Or go to ${blue}https://ngrok.com/download${end} and place the binary in your PATH.\n" >&2
+    fi
     exit 1
 fi
 
