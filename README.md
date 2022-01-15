@@ -12,7 +12,7 @@ Required:
    ```sh
    sudo apt install openssh-server tmux jq snapd
    sudo snap install ngrok
-   go get github.com/koenbollen/jl
+   go install github.com/koenbollen/jl@latest
    ```
   
 2. the `ngroker` script somewhere in your PATH, e.g.:
